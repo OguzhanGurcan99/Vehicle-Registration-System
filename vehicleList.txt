@@ -1,0 +1,3 @@
+Car,Hyundai20,Red,65908,true,true
+Car,RenaultMegane,White,140754,false,true
+Motorbike,M34,Black,89545,true,false
