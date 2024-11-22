@@ -1,6 +1,8 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,23 +41,26 @@ public class Main {
         return vehicles;
     }
 
-    // DEMO
-    public static void addToDatabase(List<Vehicle> vehicles){
+    // SEND DATA TO DATABASE
+    public static void addToDatabase(List<Vehicle> vehicles) throws SQLException {
         Validator validator = new Validator();
+        DatabaseManager databaseManager = new DatabaseManager();
+        databaseManager.connection = databaseManager.getConnection();
 
         for(Vehicle vehicle : vehicles){
             if (validator.isValid(vehicle)){
                 vehicle.setPrice();
-                System.out.println("Araç sisteme eklendi Fiyat : " + vehicle.getPrice());
+                databaseManager.insertData(vehicle);
+                System.out.println("Araç bilgileri veri tabanına eklendi.");
             }
             else{
-                System.out.println("Araç bilgileri geçersiz !");
+                System.out.println("Araç bilgileri geçersiz ! Eklenemedi ! ");
             }
         }
-
+        databaseManager.connection.close();
     }
 
-    public static void main(String[] args) throws UndefinedVehicleException {
+    public static void main(String[] args) throws UndefinedVehicleException, SQLException {
 
        List<String> lines = readFile("vehicleList.txt");
        List<Vehicle> vehicleList = processFile(lines);
